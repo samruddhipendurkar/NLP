@@ -1,0 +1,135 @@
+Q1 Write a Python program using NLTK to extract named entities from the sentence: "Apple Inc. is looking at buying U.K. startup for $1 billion." 
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.tag import pos_tag
+from nltk.chunk import ne_chunk
+
+# Download the necessary NLTK data
+nltk.download('punkt')
+nltk.download('maxent_ne_chunker_tab')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
+# Download 'punkt_tab' for sentence tokenization
+nltk.download('punkt_tab') # This line was added to download the necessary data
+# Download 'averaged_perceptron_tagger_eng' for POS tagging
+nltk.download('averaged_perceptron_tagger_eng') # This line was added to download the necessary data
+
+
+def extract_named_entities(sentence):
+  """Extracts named entities from a single sentence using NLTK.
+
+  Args:
+    sentence: The input sentence.
+
+  Returns:
+    A list of named entities found in the sentence.
+  """
+  tokens = word_tokenize(sentence)
+  tagged_tokens = pos_tag(tokens)
+  named_entities = ne_chunk(tagged_tokens)
+
+  entities = []
+  for subtree in named_entities.subtrees():
+    if subtree.label() != 'S':  # Exclude the root node ('S')
+      entities.append((subtree.label(), " ".join(token for token, pos in subtree.leaves())))
+
+  return entities
+
+sentence = "Apple Inc. is looking at buying U.K. startup for $1 billion."
+named_entities = extract_named_entities(sentence)
+
+#To see the output, run the code.
+print(named_entities)
+
+
+
+
+Q2 Using NLTK, write a function that takes a list of sentences and returns a list of named entities found in each sentence. 
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.tag import pos_tag
+from nltk.chunk import ne_chunk
+
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
+
+def extract_named_entities_from_sentences(sentences):
+    """Extracts named entities from a list of sentences.
+
+    Args:
+        sentences: A list of sentences.
+
+    Returns:
+        A list of named entities found in each sentence.
+    """
+    all_entities = []
+    for sentence in sentences:
+        tokens = word_tokenize(sentence)
+        tagged_tokens = pos_tag(tokens)
+        named_entities = ne_chunk(tagged_tokens)
+
+        entities = []
+        for subtree in named_entities.subtrees():
+            if subtree.label() != 'S':
+                entities.append((subtree.label(), " ".join(token for token, pos in subtree.leaves())))
+        all_entities.append(entities)
+    return all_entities
+
+sentences = [
+    "Apple Inc. is looking at buying U.K. startup for $1 billion.",
+    "Google is a large company.",
+    "Barack Obama was the president of the United States."
+]
+named_entities_list = extract_named_entities_from_sentences(sentences)
+
+#To see the output, run the code.
+print(named_entities_list)
+
+
+
+
+Q3 Write a Python program that uses NLTK to extract and display all noun phrases from a given text
+import nltk
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.tag import pos_tag
+from nltk.chunk import ne_chunk
+
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('maxent_ne_chunker')
+nltk.download('words')
+
+def extract_noun_phrases(text):
+  """Extracts noun phrases from a given text.
+
+  Args:
+    text: The input text.
+
+  Returns:
+    A list of noun phrases.
+  """
+  sentences = sent_tokenize(text)
+  noun_phrases = []
+
+  for sentence in sentences:
+    tokens = word_tokenize(sentence)
+    tagged_tokens = pos_tag(tokens)
+
+    grammar = "NP: {<DT>?<JJ>*<NN>}"  # Define a grammar for noun phrases
+    cp = nltk.RegexpParser(grammar)
+    result = cp.parse(tagged_tokens)
+
+    for subtree in result.subtrees():
+      if subtree.label() == 'NP':
+        noun_phrases.append(" ".join(word for word, tag in subtree.leaves()))
+
+  return noun_phrases
+
+text = "The quick brown fox jumps over the lazy dog. This is a simple sentence."
+noun_phrases = extract_noun_phrases(text)
+
+#To see the output, run the code.
+print(noun_phrases)
