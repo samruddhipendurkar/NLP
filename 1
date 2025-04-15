@@ -1,33 +1,60 @@
 Q1 using gutenberg corpus in nltk, list all available file identifiers
 import nltk
-from nltk.tokenize import word_tokenize
-nltk.download('punkt_tab')
-sentence = "Natural Language Processing with Python is fun!"
-tokens = word_tokenize(sentence)
-print(tokens)
+nltk.download('gutenberg') # Download the Gutenberg Corpus
+from nltk.corpus import gutenberg
+
+# List all available file identifiers
+file_ids = gutenberg.fileids()
+print(file_ids)
+
+
+
 
 Q2 calculate avg wordlength , avg sentence length and lexical diversity for moby dick
 import nltk
-from nltk.probability import FreqDist
-nltk.download('gutenberg')
-#load moby dick text
-moby_dick_text = nltk.corpus.gutenberg.words('melville-moby_dick.txt')
-#compute frequency distribution
-fdist = FreqDist(moby_dick_text)
-#print the 15 most common words
-print(fdist.most_common(15))
+from nltk.corpus import gutenberg
+
+# Download the 'punkt_tab' data package
+nltk.download('punkt_tab')
+
+# Load Moby Dick text
+moby_words = gutenberg.words('melville-moby_dick.txt')
+moby_sentences = gutenberg.sents('melville-moby_dick.txt')
+
+# Calculate average word length
+avg_word_length = sum(len(word) for word in moby_words) / len(moby_words)
+
+# Calculate average sentence length (in words)
+avg_sentence_length = sum(len(sentence) for sentence in moby_sentences) / len(moby_sentences)
+
+# Calculate lexical diversity
+lexical_diversity = len(set(moby_words)) / len(moby_words)
+
+# Print results
+print(f"Average Word Length: {avg_word_length:.2f}")
+print(f"Average Sentence Length: {avg_sentence_length:.2f} words")
+print(f"Lexical Diversity: {lexical_diversity:.4f}")
+
+
+
+
 
 Q3 using brown corpus, find most freq word in news category
 import nltk
-from nltk.collocations import BigramCollocationFinder
-from nltk.metrics import BigramAssocMeasures
-from nltk.corpus import gutenberg
-nltk.download('gutenberg')
-#load sense and sensiblity text
-words = nltk.corpus.gutenberg.words('austen-sense.txt')
-#create bigram finder
-bigram_finder = BigramCollocationFinder.from_words(words)
-#get bigrams
-top_bigrams = bigram_finder.nbest(BigramAssocMeasures.likelihood_ratio, 10)
-#print top bigrams
-print(top_bigrams)
+from nltk.corpus import brown
+from collections import Counter
+
+# Download the 'brown' corpus
+nltk.download('brown') # This line is added to download the necessary data
+
+# Load words from the 'news' category
+news_words = brown.words(categories='news')
+
+# Count word frequencies
+word_freq = Counter(news_words)
+
+# Find the most frequent word
+most_common_word, most_common_count = word_freq.most_common(1)[0]
+
+# Print result
+print(f"Most Frequent Word: '{most_common_word}' (Frequency: {most_common_count})")
