@@ -1,0 +1,64 @@
+Q1 Write a Python program using NLTK to perform part-of-speech tagging on the sentence: "The quick brown fox jumps over the lazy dog." 
+import nltk
+from nltk import word_tokenize, pos_tag
+
+nltk.download('punkt_tab')
+nltk.download('averaged_perceptron_tagger_eng')
+
+text = "The quick brown fox jumps over the lazy dog."
+tokens = word_tokenize(text)
+tagged_tokens = pos_tag(tokens)
+
+print(tagged_tokens)
+
+
+
+Q2 Using NLTK, write a function that takes a list of sentences and returns a list of part-of-speech tagged sentences. 
+import nltk
+from nltk import word_tokenize, pos_tag
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+
+def pos_tag_sentences(sentences):
+  """
+  Takes a list of sentences and returns a list of part-of-speech tagged sentences.
+
+  Args:
+    sentences: A list of sentences.
+
+  Returns:
+    A list of part-of-speech tagged sentences.
+  """
+  tagged_sentences = []
+  for sentence in sentences:
+    tokens = word_tokenize(sentence)
+    tagged_tokens = pos_tag(tokens)
+    tagged_sentences.append(tagged_tokens)
+  return tagged_sentences
+
+sentences = ["The quick brown fox jumps over the lazy dog.", "This is another sentence."]
+tagged_sentences = pos_tag_sentences(sentences)
+print(tagged_sentences)
+
+
+
+
+Q3 Explain how to map the Penn Treebank POS tags to the Universal POS tags using NLTK. Provide a code example that tags a sentence and maps the tags accordingly. 
+import nltk
+from nltk.tag import pos_tag, map_tag
+
+nltk.download('universal_tagset')
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+
+
+text = "The quick brown fox jumps over the lazy dog."
+tokens = nltk.word_tokenize(text)
+
+# Tagging with Penn Treebank tags
+penn_treebank_tags = pos_tag(tokens)
+print("Penn Treebank Tags:", penn_treebank_tags)
+
+# Mapping to Universal POS tags
+universal_tags = [(word, map_tag('en-ptb', 'universal', tag)) for word, tag in penn_treebank_tags]
+print("Universal POS Tags:", universal_tags)
