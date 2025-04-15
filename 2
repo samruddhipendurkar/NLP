@@ -1,0 +1,47 @@
+Q1 Use the inaugural address corpus to find the total number of words and the total number of unique words in the inaugural addresses delivered in the 21st century. 
+import nltk
+from nltk.tokenize import word_tokenize
+nltk.download('punkt_tab')
+sentence = "Natural Language Processing with Python is fun!"
+tokens = word_tokenize(sentence)
+print(tokens)
+
+
+
+
+Q2 Write a Python program to find the frequency distribution of the words "democracy", "freedom", "liberty", and "equality" in all inaugural addresses using NLTK. 
+import nltk
+from nltk.probability import FreqDist
+nltk.download('gutenberg')
+
+#load moby dick text
+moby_dick_text = nltk.corpus.gutenberg.words('melville-moby_dick.txt')
+
+#compute frequency distribution
+fdist = FreqDist(moby_dick_text)
+
+#print the 15 most common words
+print(fdist.most_common(15))
+
+
+
+
+Q3 Write a Python program to display the 5 most common words in the text of "Sense and Sensibility" by Jane Austen using the Gutenberg Corpus. 
+import nltk
+from nltk.collocations import BigramCollocationFinder
+from nltk.metrics import BigramAssocMeasures
+from nltk.corpus import gutenberg
+
+nltk.download('gutenberg')
+
+#load sense and sensiblity text
+words = nltk.corpus.gutenberg.words('austen-sense.txt')
+
+#create bigram finder
+bigram_finder = BigramCollocationFinder.from_words(words)
+
+#get bigrams
+top_bigrams = bigram_finder.nbest(BigramAssocMeasures.likelihood_ratio, 10)
+
+#print top bigrams
+print(top_bigrams)
