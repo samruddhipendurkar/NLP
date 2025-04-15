@@ -1,0 +1,87 @@
+Q1 Write a Python program using NLTK to define a context-free grammar (CFG) that can parse simple sentences like "The cat sat on the mat." 
+Use this grammar to generate the parse tree for the sentence. 
+import nltk
+# Define the grammar
+grammar = nltk.CFG.fromstring("""
+S -> NP VP
+VP -> V PP | V NP
+PP -> P NP
+NP -> Det N | Det N PP
+Det -> 'the' | 'The'
+N -> 'cat' | 'mat'
+V -> 'sat'
+P -> 'on'
+""")
+
+# Parse the sentence
+sentence = "The cat sat on the mat".split()
+parser = nltk.ChartParser(grammar)
+trees = list(parser.parse(sentence))
+
+# Print the parse tree
+for tree in trees:
+    print(tree)
+
+
+    
+
+Q2 Using NLTK, write a function that takes a sentence as input and returns all possible parse trees using a given CFG. 
+Demonstrate this function with the sentence "I saw the man with the telescope." 
+import nltk
+
+def get_all_parse_trees(sentence, grammar):
+    """
+    Returns all possible parse trees for a sentence using a given CFG.
+
+    Args:
+        sentence: The sentence to parse.
+        grammar: The CFG to use for parsing.
+
+    Returns:
+        A list of parse trees.
+    """
+    parser = nltk.ChartParser(grammar)
+    trees = list(parser.parse(sentence.split()))
+    return trees
+
+# Example usage
+grammar = nltk.CFG.fromstring("""
+S -> NP VP
+VP -> V NP | V PP | V NP PP
+PP -> P NP
+NP -> Det N | Det N PP | 'I'
+Det -> 'the' | 'a'
+N -> 'man' | 'telescope'
+V -> 'saw'
+P -> 'with'
+""")
+sentence = "I saw the man with the telescope"
+trees = get_all_parse_trees(sentence, grammar)
+
+for tree in trees:
+    print(tree)
+
+
+
+
+Q3 Write a Python program using NLTK to create a recursive descent parser for a given CFG. Parse the sentence "She eats a sandwich." and display the parse tree. 
+import nltk
+
+# Define the grammar
+grammar = nltk.CFG.fromstring("""
+S -> NP VP
+VP -> V NP
+NP -> Det N | Pronoun
+Det -> 'a'
+N -> 'sandwich'
+V -> 'eats'
+Pronoun -> 'She'
+""")
+
+# Create the parser
+parser = nltk.RecursiveDescentParser(grammar)
+
+# Parse the sentence
+sentence = "She eats a sandwich".split()
+for tree in parser.parse(sentence):
+    print(tree)
