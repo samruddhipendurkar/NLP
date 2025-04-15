@@ -1,0 +1,101 @@
+Q1 Using the names corpus in NLTK, build a gender classifier that predicts whether a name is male or female based on the last letter of the name. Evaluate its accuracy. 
+import nltk
+from nltk.corpus import names
+import random
+from nltk import NaiveBayesClassifier
+from nltk import classify
+
+# Download the names corpus if you haven't already.
+nltk.download('names')
+
+# Create a list of labeled names (name, gender)
+labeled_names = ([(name, 'male') for name in names.words('male.txt')] +
+                 [(name, 'female') for name in names.words('female.txt')])
+
+# Define the feature extractor
+def gender_features(name):
+    return {'last_letter': name[-1].lower()}
+
+# Shuffle the data and create training and testing sets
+random.shuffle(labeled_names)
+featuresets = [(gender_features(n), gender) for (n, gender) in labeled_names]
+train_set, test_set = featuresets[500:], featuresets[:500]
+
+# Train the classifier
+classifier = NaiveBayesClassifier.train(train_set)
+
+# Evaluate accuracy
+accuracy = classify.accuracy(classifier, test_set)
+print(f"Accuracy: {accuracy}")
+
+
+
+
+Q2 Enhance the gender classifier by including features such as the first letter and the length of the name. Evaluate if these features improve the classifier's accuracy. 
+import nltk
+from nltk.corpus import names
+import random
+from nltk import NaiveBayesClassifier
+from nltk import classify
+
+nltk.download('names')
+
+labeled_names = ([(name, 'male') for name in names.words('male.txt')] +
+                 [(name, 'female') for name in names.words('female.txt')])
+
+def gender_features(name):
+    features = {}
+    features["first_letter"] = name[0].lower()
+    features["last_letter"] = name[-1].lower()
+    features["name_length"] = len(name)  # Add name length as a feature
+    return features
+
+random.shuffle(labeled_names)
+featuresets = [(gender_features(n), gender) for (n, gender) in labeled_names]
+train_set, test_set = featuresets[500:], featuresets[:500]
+
+classifier = NaiveBayesClassifier.train(train_set)
+
+accuracy = classify.accuracy(classifier, test_set)
+print(f"Accuracy: {accuracy}")
+
+
+
+
+Q3 Using the movie_reviews corpus in NLTK, build a document classifier to categorize movie reviews as positive or negative. Evaluate its performance. 
+import nltk
+import random
+from nltk.corpus import movie_reviews
+from nltk import classify
+from nltk import NaiveBayesClassifier
+
+# Download the 'movie_reviews' corpus if you haven't already
+nltk.download('movie_reviews')
+
+# Prepare the data
+documents = [(list(movie_reviews.words(fileid)), category)
+             for category in movie_reviews.categories()
+             for fileid in movie_reviews.fileids(category)]
+
+random.shuffle(documents)
+
+# Define features
+all_words = nltk.FreqDist(w.lower() for w in movie_reviews.words())
+word_features = list(all_words)[:2000]  # Use top 2000 most frequent words as features
+
+def document_features(document):
+    document_words = set(document)
+    features = {}
+    for word in word_features:
+        features['contains({})'.format(word)] = (word in document_words)
+    return features
+
+# Create feature sets
+featuresets = [(document_features(d), c) for (d, c) in documents]
+train_set, test_set = featuresets[100:], featuresets[:100]
+
+# Train the classifier
+classifier = NaiveBayesClassifier.train(train_set)
+
+# Evaluate and print accuracy
+print(classify.accuracy(classifier, test_set))
