@@ -1,0 +1,58 @@
+Q1 Explain the difference between assigning a list to a new variable using direct assignment (=) and using the copy() method. Provide code examples to illustrate the difference. 
+# Direct assignment
+list1 = [1, 2, 3]
+list2 = list1
+list2[0] = 10
+
+print(list1)  # Output: [10, 2, 3]
+print(list2)  # Output: [10, 2, 3]
+
+
+# Using copy()
+list3 = [1, 2, 3]
+list4 = list3.copy()
+list4[0] = 10
+
+print(list3)  # Output: [1, 2, 3]
+print(list4)  # Output: [10, 2, 3]
+
+
+
+
+Q2 Write a function extract_nouns(text) that takes a text string as input and returns a list of all nouns in the text. Use NLTK's part-of-speech tagging for this task. 
+import nltk
+
+# Download the 'punkt_tab' data:
+nltk.download('punkt_tab')
+# Download the 'averaged_perceptron_tagger' data:
+nltk.download('averaged_perceptron_tagger')
+# Download the language-specific data for 'averaged_perceptron_tagger':
+nltk.download('averaged_perceptron_tagger_eng') # This line was added to download the language specific data
+
+def extract_nouns(text):
+  """
+  Extracts nouns from a text string using NLTK's POS tagging.
+
+  Args:
+    text: The input text string.
+
+  Returns:
+    A list of nouns found in the text.
+  """
+  tokens = nltk.word_tokenize(text)
+  tagged = nltk.pos_tag(tokens)
+  nouns = [word for word, pos in tagged if pos.startswith('NN')]
+  return nouns
+
+# Example usage
+text = "The quick brown fox jumps over the lazy dog."
+nouns = extract_nouns(text)
+print(nouns)  # Output: ['fox', 'dog']
+
+
+
+
+Q3 Demonstrate how to use list comprehension to create a list of the lengths of each word in a given sentence. 
+sentence = "This is a sample sentence."
+word_lengths = [len(word) for word in sentence.split()]
+print(word_lengths)  # Output: [4, 2, 1, 6, 8]
