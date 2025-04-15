@@ -1,0 +1,33 @@
+Q1 using gutenberg corpus in nltk, list all available file identifiers
+import nltk
+from nltk.tokenize import word_tokenize
+nltk.download('punkt_tab')
+sentence = "Natural Language Processing with Python is fun!"
+tokens = word_tokenize(sentence)
+print(tokens)
+
+Q2 calculate avg wordlength , avg sentence length and lexical diversity for moby dick
+import nltk
+from nltk.probability import FreqDist
+nltk.download('gutenberg')
+#load moby dick text
+moby_dick_text = nltk.corpus.gutenberg.words('melville-moby_dick.txt')
+#compute frequency distribution
+fdist = FreqDist(moby_dick_text)
+#print the 15 most common words
+print(fdist.most_common(15))
+
+Q3 using brown corpus, find most freq word in news category
+import nltk
+from nltk.collocations import BigramCollocationFinder
+from nltk.metrics import BigramAssocMeasures
+from nltk.corpus import gutenberg
+nltk.download('gutenberg')
+#load sense and sensiblity text
+words = nltk.corpus.gutenberg.words('austen-sense.txt')
+#create bigram finder
+bigram_finder = BigramCollocationFinder.from_words(words)
+#get bigrams
+top_bigrams = bigram_finder.nbest(BigramAssocMeasures.likelihood_ratio, 10)
+#print top bigrams
+print(top_bigrams)
