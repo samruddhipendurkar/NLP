@@ -1,0 +1,87 @@
+Q1 Write a Python program to download the text of "Pride and Prejudice" by Jane Austen from Project Gutenberg, tokenize the text, and display the first 10 tokens. 
+import nltk
+import urllib.request
+from nltk.tokenize import word_tokenize
+
+# Download the text of Pride and Prejudice
+url = "http://www.gutenberg.org/files/1342/1342-0.txt"
+response = urllib.request.urlopen(url)
+text = response.read().decode('utf-8')
+
+# Download the 'punkt_tab' resource for sentence tokenization
+nltk.download('punkt_tab')  # Download the 'punkt_tab' data
+
+# Tokenize the text
+nltk.download('punkt') # Download the punkt tokenizer if you haven't already
+tokens = word_tokenize(text)
+
+# Display the first 10 tokens
+print(tokens[:10])
+
+
+
+
+Q2 Using NLTK, write a function that takes a URL as input, fetches the raw text from the webpage, and returns the number of words in the text. 
+import nltk
+import urllib.request
+from nltk.tokenize import word_tokenize
+
+def count_words_from_url(url):
+  """
+  Fetches raw text from a URL, tokenizes it, and returns the word count.
+
+  Args:
+    url: The URL of the webpage.
+
+  Returns:
+    The number of words in the text.
+  """
+  try:
+    response = urllib.request.urlopen(url)
+    text = response.read().decode('utf-8')
+    nltk.download('punkt', quiet=True)  # Download punkt tokenizer if needed
+    tokens = word_tokenize(text)
+    return len(tokens)
+  except Exception as e:
+    print(f"Error processing URL: {e}")
+    return -1  # Return -1 to indicate an error
+
+# Example usage:
+url = "http://www.gutenberg.org/files/1342/1342-0.txt"
+word_count = count_words_from_url(url)
+if word_count != -1:
+  print(f"The webpage contains {word_count} words.")
+
+
+  
+Q3 Explain how to remove HTML tags from a web page's content using Python and NLTK. Provide a code example that fetches a web page, removes HTML tags, and prints the cleaned text. 
+!pip install beautifulsoup4 nltk  # Install necessary libraries
+
+from bs4 import BeautifulSoup
+import urllib.request
+import nltk
+
+def remove_html_tags(url):
+  """
+  Fetches a webpage, removes HTML tags, and returns the cleaned text.
+
+  Args:
+    url: The URL of the webpage.
+
+  Returns:
+    The cleaned text without HTML tags.
+  """
+  try:
+    response = urllib.request.urlopen(url)
+    html = response.read().decode('utf-8')
+    soup = BeautifulSoup(html, 'html.parser')
+    text = soup.get_text()  # Extract text without tags
+    return text
+  except Exception as e:
+    print(f"Error processing URL: {e}")
+    return ""  # Return empty string on error
+
+# Example usage:
+url = "http://www.gutenberg.org/files/1342/1342-0.txt"  # Replace with your URL
+cleaned_text = remove_html_tags(url)
+print(cleaned_text)
